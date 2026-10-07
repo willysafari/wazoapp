@@ -11,13 +11,17 @@ class IdeaController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+        $ideas = Auth::user()->ideas()->when($request->status, function ($query, $status) {
+            return $query->where('status', $status);
+        })->get();
 
-        $ideas = Auth::user()->ideas()->get();
-
-        return view('ideas.index', ['ideas' => $ideas]);
+        return view('ideas.index', [
+            'ideas' => $ideas,
+            'statusCounts' => Idea::statusCounts(Auth::user()),
+        ]);
     }
 
     /**
