@@ -30,7 +30,8 @@ class RegisteredUserTest extends TestCase
             'password_confirmation' => 'secret-password',
         ]);
 
-        $response->assertRedirect('/');
+        $response->assertRedirect(route('ideas.index'));
+        $response->assertSessionHas('success', 'Account created successfully');
         $this->assertDatabaseHas('users', [
             'name' => 'Test Staff',
             'email' => 'staff@example.com',

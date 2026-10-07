@@ -44,12 +44,14 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('')->with('success', 'You are now logged in.');
+        return redirect()->route('ideas.index')->with('success', 'You are now logged in.');
     }
 
-    public function logout(Request $request)
+    public function destroy(Request $request)
     {
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
         return redirect('/login');
     }
@@ -86,10 +88,4 @@ class AuthController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-        Auth::logout();
-        return redirect('/login')->with('success','You have been logged out.');
-    }
 }

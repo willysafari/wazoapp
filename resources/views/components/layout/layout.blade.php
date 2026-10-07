@@ -17,7 +17,6 @@
             x-init="setTimeout(() => show = false, 3000)"
             class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative w-2xl float-right"
             x-transition.duration.opacity.500ms
-
              x-show="show"
              role="alert">
                {{ $value }}
@@ -26,6 +25,7 @@
         <main>
             {{ $slot }}
         </main>
+
 
     </div>
 </body>

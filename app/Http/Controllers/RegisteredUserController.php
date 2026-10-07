@@ -34,7 +34,7 @@ class RegisteredUserController extends Controller
         Auth::login($user);
         $request->session()->regenerate();
 
-        return redirect('/')->with('success', 'Account created successfully');
+        return redirect()->route('ideas.index')->with('success', 'Account created successfully');
     }
 
     /**
