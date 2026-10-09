@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <div class="min-h-screen bg-background text-foreground">
+    <div class="min-h-screen bg-background text-foreground flex flex-col">
         <x-navigation.nav />
         @session('success')
             <div x-data="{ show: true }"
@@ -22,7 +22,7 @@
                {{ $value }}
             </div>
         @endsession
-        <main>
+        <main class="grow">
             {{ $slot }}
         </main>
 

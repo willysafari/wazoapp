@@ -1,7 +1,29 @@
-@props([
-    'name', 'label', 'type'
-])
-<div class="grid gap-2">
-    <label for="{{ $name }}" class="label">{{ $label }}</label>
-    <input type="{{ $type ?? 'text' }}" name="{{ $name }}" id="{{ $name }}" class="input" required {{ $attributes }} >
+@props(['label' => false, 'name', 'type' => 'text'])
+
+<div class="space-y-2">
+    @if ($label)
+        <label for="{{ $name }}" class="label">{{ $label }}</label>
+    @endif
+
+    @if ($type === 'textarea')
+        <textarea
+            name="{{ $name }}"
+            id="{{ $name }}"
+            class="textarea"
+            {{ $attributes }}
+        ></textarea>
+    @else
+        <input
+            type="{{ $type }}"
+            id="{{ $name }}"
+            name="{{ $name }}"
+            class="input"
+            value="{{ old($name) }}"
+            required
+            {{ $attributes }}>
+    @endif
+
+    @error($name)
+        <p class="error">{{ $message }}</p>
+    @enderror
 </div>

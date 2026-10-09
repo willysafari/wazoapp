@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreIdeaRequest;
 use App\Models\Idea;
 use Auth;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class IdeaController extends Controller
         //
         $ideas = Auth::user()->ideas()->when($request->status, function ($query, $status) {
             return $query->where('status', $status);
-        })->get();
+        })->latest()->get();
 
         return view('ideas.index', [
             'ideas' => $ideas,
@@ -30,14 +31,21 @@ class IdeaController extends Controller
     public function create()
     {
         //
+        return view('ideas.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreIdeaRequest $request)
     {
         //
+        // dd($request->validated());
+        $data = $request->validated();
+        Auth::user()->ideas()->create($data);
+
+        return redirect()->route('ideas.index')->with('success', 'successfully created ideas');
+
     }
 
     /**
@@ -46,6 +54,9 @@ class IdeaController extends Controller
     public function show(Idea $idea)
     {
         //
+        return view('ideas.show', [
+            'idea' => $idea,
+        ]);
     }
 
     /**
@@ -54,6 +65,9 @@ class IdeaController extends Controller
     public function edit(Idea $idea)
     {
         //
+        return view('ideas.edit', [
+            'idea' => $idea,
+        ]);
     }
 
     /**
@@ -62,6 +76,15 @@ class IdeaController extends Controller
     public function update(Request $request, Idea $idea)
     {
         //
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'status' => 'required|in:pending,in_progress,completed',
+        ]);
+        $idea->update($request->all());
+
+        return redirect()->route('ideas.index')->with('success', 'successfully edited ');
+
     }
 
     /**
@@ -70,5 +93,8 @@ class IdeaController extends Controller
     public function destroy(Idea $idea)
     {
         //
+        $idea->delete();
+
+        return redirect()->route('ideas.index')->with('success', 'Idea deleted successfully');
     }
 }
